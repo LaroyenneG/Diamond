@@ -111,7 +111,6 @@ int voidCellIndex(board_t* b) {
 }
 
 void computeScore(board_t* b) {
-
     b->blueScore = 0;
     b->redScore = 0;
     int idVoid = voidCellIndex(b);
@@ -211,7 +210,6 @@ tree_t* createTree() {
     return t;
 }
 
-
 void setFirstBlueChoice(tree_t* t, board_t* b, int idCell) {
     t->root=createNode(idCell,1);
     setPawn(b ,idCell,1);
@@ -251,7 +249,6 @@ void computePossibilities(node_t* n, board_t* b) {
         }
         return;
     }
-
     int nextPawnValue = (n->turn+2)/2;
     if ((n->turn+1)%2 == 0) nextPawnValue += 6;
     for(int i=0;i<13;i++) {
@@ -306,6 +303,10 @@ int computeDraws(node_t* n) {
     return nb;
 }
 
+/*
+ * seekPossibility()
+ * Returns the list of possible nodes to play.
+ */
 node_t** seekPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
         return parent->children;
@@ -317,6 +318,7 @@ node_t** seekPossibility(node_t* parent, int idCell){
     while (!isEmpty(queue)){
         node_t* n = poll(queue);
         if(n->idCell==idCell){
+            free_queue(queue);
             return n->children;
         }else {
             for(int i=0; i<n->nbChildren; i++){
@@ -328,6 +330,10 @@ node_t** seekPossibility(node_t* parent, int idCell){
     return NULL;
 }
 
+/*
+ * seeknbPossibility()
+ * Returns the number of game possibilities.
+ */
 int seeknbPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
         return parent->nbChildren;
@@ -340,6 +346,7 @@ int seeknbPossibility(node_t* parent, int idCell){
         node_t* n = poll(queue);
 
         if(n->idCell==idCell){
+            free_queue(queue);
             return n->nbChildren;
         }else {
             for(int i=0; i<n->nbChildren; i++){
@@ -352,13 +359,13 @@ int seeknbPossibility(node_t* parent, int idCell){
 }
 
 /*
-  experimental
+ * findGoodChoise()
+ * Returns the choice of the red player, depending on the choice of the blue player.
+ * Searches the node with the most victory in the tree.
  */
 char findGoodChoise(tree_t* t, int bleuCell){
-
     node_t** nodes=NULL;
     int nbPossibility=0;
-
     if(t->saveNode==NULL){
         nodes=seekPossibility(t->root, bleuCell);
         nbPossibility=seeknbPossibility(t->root, bleuCell);
@@ -366,35 +373,27 @@ char findGoodChoise(tree_t* t, int bleuCell){
         nodes=seekPossibility(t->saveNode, bleuCell);
         nbPossibility=seeknbPossibility(t->saveNode, bleuCell);
     }
-
     int nbWin[nbPossibility];
     int nbDraw[nbPossibility];
-
     for (int i=0; i<nbPossibility; i++){
         nbWin[i]=computeRedVictories(nodes[i]);
         nbDraw[i]=computeDraws(nodes[i]);
     }
-
     int bestNode=0;
     int bestStat=0;
-
     for (int i=0; i<nbPossibility;i++){
         if(bestStat<nbWin[i]){
             bestNode=i;
             bestStat=nbWin[i];
         }
     }
-
     for (int i=0; i<nbPossibility;i++){
         if(bestStat<nbDraw[i]){
             bestNode=i;
             bestStat=nbDraw[i];
         }
     }
-
-
     t->saveNode=nodes[bestNode];
-
     return nodes[bestNode]->idCell;
 }
 
