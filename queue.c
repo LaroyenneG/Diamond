@@ -14,6 +14,9 @@ queue_t* createQueue(){
     return q;
 }
 
+/* offer()
+ * Adds a node at the end of the queue.
+ */
 void offer(queue_t* q, node_t* n){
     int sizememory=q->nbNode;
     node_t** memory;
@@ -27,6 +30,9 @@ void offer(queue_t* q, node_t* n){
     free(memory);
 }
 
+/* poll()
+ * Returns the node at the beginning of the queue and removes it.
+ */
 node_t* poll(queue_t* q){
     int sizememory=q->nbNode;
     node_t** memory;
@@ -41,16 +47,25 @@ node_t* poll(queue_t* q){
     return value;
 }
 
+/* clear()
+ * Empty the contents of the queue.
+ */
 void clear(queue_t* q){
     free(q->listNode);
     q->listNode=malloc(sizeof(node_t*)*0);
 }
 
+/* free_queue()
+ * Releases the memory used by the queue.
+ */
 void free_queue(queue_t* q){
     free(q->listNode);
     free(q);
 }
 
+/* isEmpty()
+ * Returns 1 if the queue is empty, else 0.
+ */
 int isEmpty(queue_t* q){
     if(q->nbNode>0){
         return 0;
@@ -58,6 +73,9 @@ int isEmpty(queue_t* q){
     return 1;
 }
 
+/* printQueue()
+ * Displays all nodes in the queue.
+ */
 void printQueue(queue_t* queue){
     printf("Nodes :\n");
     for(int i=0; i<queue->nbNode; i++){

@@ -100,6 +100,11 @@ void clearBoard(board_t* b) {
     b->redScore = 0;
 }
 
+/* voidCellIndex():
+ * returns the index of the frst encountered void cell, i.e.
+ * a cell that contains -1. Normally, this method shoud only be called
+ * when the party is over
+ */
 int voidCellIndex(board_t* b) {
     int id = -1;
     for(int i=0;i<13;i++) {
@@ -109,7 +114,13 @@ int voidCellIndex(board_t* b) {
     }
     return id;
 }
-
+/* computeScore() :
+ * computes the number of points of blue/red pawns around
+ * the empty cell.
+ *
+ * CAUTION : this method should be called only
+ * if the party is over, i.e. when there is a single void cell.
+*/
 void computeScore(board_t* b) {
     b->blueScore = 0;
     b->redScore = 0;
@@ -126,12 +137,21 @@ void computeScore(board_t* b) {
     }
 }
 
+/* setPawn() :
+ * put a pawn of the given value at idCell in the board.
+ */
 void setPawn(board_t* b, int idCell, char value) {
     b->board[idCell] = value;
 }
 
+/* getPawn()
+ * Returns the value of the pawn to the given idCell.
+ */
 char getPawn(board_t* b, int idCell) { return b->board[idCell]; }
 
+/* printBoard()
+ * Displays the board in the terminal.
+ */
 void printBoard(board_t* b){
     int indentation=5;
     const char grid[] ={'\n',' ','+','-','+','-','+','-','+','\n',' ','|','n','|','n','|','n','|','\n','+','-','+','-','+','-','+','-','+','\n','|','n','|','n','|','n','|','n','|','\n','+','-','+','-','+','-','+','-','+','\n',' ','|','n','|','n','|','n','|','\n',' ','+','-','+','-','+','-','+','\n',' ',' ','|','n','|','n','|','\n',' ',' ','+','-','+','-','+','\n',' ',' ',' ','|','n','|','\n',' ',' ',' ','+','-','+','\n'};
@@ -184,6 +204,16 @@ node_t* createNode(int idCell, int turn) {
     return n;
 }
 
+/* addChild() :
+ * create a child node of the current one and put it in the
+ * array of children. By construction, the child node represents
+ * the pawn played at turn+1. The paramters idCell is the cell where
+ * the pawn is played.
+ *
+ * CAUTION : this method DO NOT pout the pawn in the board. It should be
+ * done outside this method, i.e. in the method that builds the tree, thus
+ * in the Tree class.
+ */
 node_t* addChild(node_t* n, int idCell) {
     node_t* child = NULL;
     child=createNode(idCell, n->turn+1);
@@ -192,6 +222,9 @@ node_t* addChild(node_t* n, int idCell) {
     return child;
 }
 
+/* printBoard()
+ * Displays the node in the terminal.
+ */
 void printNode(node_t* n){
     printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n",n->idCell, n->turn, n->nbChildren, n->result);
 }
@@ -210,22 +243,41 @@ tree_t* createTree() {
     return t;
 }
 
+/* setFirstBlueChoice():
+ * create the root node of the tree, that represents the first turn of a party, i.e.
+ * the cell chosen by the blue player to put its pawn #1
+ *
+ * CAUTION: it also sets the pawn in the board
+ */
 void setFirstBlueChoice(tree_t* t, board_t* b, int idCell) {
     t->root=createNode(idCell,1);
     setPawn(b ,idCell,1);
 }
 
+/* setFirstRedChoice():
+ * create the node that represents the second turn of a party, i.e.
+ * the cell chosen by the red player to put its pawn #1
+ *
+ * CAUTION: it also sets the pawn in the board
+ */
 void setFirstRedChoice(tree_t* t, board_t* b, int idCell) {
     addChild(t->root, idCell);
     setPawn(b ,idCell,7);
 }
 
+/* buildTree();
+ * build the tree of all possible evolution of the party, taking into account
+ * the first choice of blue and red
+ */
 void buildTree(tree_t* t, board_t* b) {
     node_t* n = t->root->children[0];
     computePossibilities(n,b);
     printf(" done.\n");
 }
 
+/* computePossibilities():
+ * create all possible children of Node n.
+ */
 void computePossibilities(node_t* n, board_t* b) {
     if (n->turn == 12) {
         computeScore(b);
@@ -261,6 +313,11 @@ void computePossibilities(node_t* n, board_t* b) {
     }
 }
 
+/* computeBlueVictories()
+ * determine recursively in how many cases blue wins
+ * in the tree that begins with n. This can be done
+ * by using the value of result attribute in leaves.
+ */
 int computeBlueVictories(node_t* n) {
     int nb = 0;
     if(n->nbChildren==0){
@@ -275,6 +332,11 @@ int computeBlueVictories(node_t* n) {
     return nb;
 }
 
+/* computeRedVictories()
+ * determine recursively in how many cases red wins
+ * in the tree that begins with n. This can be done
+ * by using the value of result attribute in leaves.
+ */
 int computeRedVictories(node_t* n) {
     int nb = 0;
     if(n->nbChildren==0){
@@ -289,6 +351,11 @@ int computeRedVictories(node_t* n) {
     return nb;
 }
 
+/* computeDraws()
+ * determine recursively in how many cases blue and red
+ * are draw in the tree that begins with n. This can be done
+ * by using the value of result attribute in leaves.
+ */
 int computeDraws(node_t* n) {
     int nb = 0;
     if(n->nbChildren==0){
@@ -303,8 +370,7 @@ int computeDraws(node_t* n) {
     return nb;
 }
 
-/*
- * seekPossibility()
+/* seekPossibility()
  * Returns the list of possible nodes to play.
  */
 node_t** seekPossibility(node_t* parent, int idCell){
@@ -330,8 +396,7 @@ node_t** seekPossibility(node_t* parent, int idCell){
     return NULL;
 }
 
-/*
- * seeknbPossibility()
+/* seeknbPossibility()
  * Returns the number of game possibilities.
  */
 int seeknbPossibility(node_t* parent, int idCell){
@@ -358,8 +423,7 @@ int seeknbPossibility(node_t* parent, int idCell){
     return 0;
 }
 
-/*
- * findGoodChoise()
+/* findGoodChoise()
  * Returns the choice of the red player, depending on the choice of the blue player.
  * Searches the node with the most victory in the tree.
  */
@@ -410,6 +474,10 @@ party_t* createParty(){
     return p;
 }
 
+/* bleuPlayer()
+ * Ask the player a cell, check if the cell to enter
+ * is correct then return the choice of the blue player.
+ */
 char bleuPlayer(party_t* p){
     int c=-1;
     while (c<0||c>12||getPawn(p->board,c)!=NO_NEIGHBOR){
@@ -419,6 +487,9 @@ char bleuPlayer(party_t* p){
     return (char) c;
 }
 
+/* start()
+ * Manages the complete game.
+ */
 void start(party_t* p){
     clearBoard(p->board);
     color(36);

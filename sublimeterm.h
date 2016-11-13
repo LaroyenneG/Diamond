@@ -23,8 +23,10 @@
 #define blanc "\e[1;37m"
 #define neutre "\e[0;m"
 
+/* clrscr()
+ * Cleans the terminal display.
+ */
 #define clrscr() printf("\033[H\033[2J");
-
 
 void color(int i);
 

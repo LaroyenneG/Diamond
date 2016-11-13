@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv){
     if(argc>1){
-        perror("Usage diamond");
+        perror("Usage: diamond");
         return 1;
     }
     clrscr();
