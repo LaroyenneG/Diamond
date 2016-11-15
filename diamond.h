@@ -38,7 +38,7 @@ typedef struct node {
 
 typedef struct tree {
     node_t* root;
-    node_t* saveNode;
+    node_t* saveNode; //In memory where the game finds in the tree.
 } tree_t;
 
 typedef struct party {
