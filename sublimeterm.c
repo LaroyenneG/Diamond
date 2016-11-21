@@ -6,7 +6,7 @@
 #include "sublimeterm.h"
 
 /* color()
- * Changes the color of the text written in the terminal.
+ * changes the color of the text written in the terminal.
  */
 void color(int i){
     switch(i){
