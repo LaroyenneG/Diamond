@@ -145,12 +145,12 @@ void setPawn(board_t* b, int idCell, char value) {
 }
 
 /* getPawn()
- * Returns the value of the pawn to the given idCell.
+ * returns the value of the pawn to the given idCell.
  */
 char getPawn(board_t* b, int idCell) { return b->board[idCell]; }
 
 /* printBoard()
- * Displays the board in the terminal.
+ * displays the board in the terminal.
  */
 void printBoard(board_t* b){
     int indentation=5;
@@ -223,7 +223,7 @@ node_t* addChild(node_t* n, int idCell) {
 }
 
 /* printBoard()
- * Displays the node in the terminal.
+ * displays the node in the terminal.
  */
 void printNode(node_t* n){
     printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n",n->idCell, n->turn, n->nbChildren, n->result);
@@ -371,7 +371,7 @@ int computeDraws(node_t* n) {
 }
 
 /* seekPossibility()
- * Returns the list of possible nodes to play.
+ * returns the list of possible nodes to play.
  */
 node_t** seekPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
@@ -397,7 +397,7 @@ node_t** seekPossibility(node_t* parent, int idCell){
 }
 
 /* seeknbPossibility()
- * Returns the number of game possibilities.
+ * returns the number of game possibilities.
  */
 int seeknbPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
@@ -424,7 +424,7 @@ int seeknbPossibility(node_t* parent, int idCell){
 }
 
 /* findGoodChoise()
- * Returns the choice of the red player, depending on the choice of the blue player.
+ * returns the choice of the red player, depending on the choice of the blue player.
  * Searches the node with the most victory in the tree.
  */
 char findGoodChoise(tree_t* t, int bleuCell){
@@ -475,7 +475,7 @@ party_t* createParty(){
 }
 
 /* bleuPlayer()
- * Ask the player a cell, check if the cell to enter
+ * ask the player a cell, check if the cell to enter
  * is correct then return the choice of the blue player.
  */
 char bleuPlayer(party_t* p){
@@ -488,7 +488,7 @@ char bleuPlayer(party_t* p){
 }
 
 /* start()
- * Manages the complete game.
+ * manages the complete game.
  */
 void start(party_t* p){
     clearBoard(p->board);
