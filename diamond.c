@@ -483,8 +483,8 @@ char bleuPlayer(party_t* p){
     while (c<0||c>12||getPawn(p->board,c)!=NO_NEIGHBOR){
         printf("The bleu player must play :\n");
         if(scanf("%d",&c)!=1){
-           //message
-           return -1;
+           perror("Input error, the value is not of the type integer");
+           exit(2);
         }
     }
     return (char) c;

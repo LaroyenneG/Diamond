@@ -1,0 +1,4 @@
+*.o
+*.exe
+CMakeLists.txt
+.idea/
