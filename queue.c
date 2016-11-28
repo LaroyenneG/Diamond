@@ -56,7 +56,7 @@ void clear(queue_t* q){
 }
 
 /* free_queue()
- * Releases the memory used by the queue.
+ * releases the memory used by the queue.
  */
 void free_queue(queue_t* q){
     free(q->listNode);
