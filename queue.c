@@ -18,16 +18,15 @@ queue_t* createQueue(){
  * adds a node at the end of the queue.
  */
 void offer(queue_t* q, node_t* n){
-    int sizememory=q->nbNode;
-    node_t** memory;
-    memory=q->listNode;
-    q->nbNode++;
-    q->listNode=malloc(sizeof(node_t*)*q->nbNode);
-    for(int i=0; i<sizememory; i++){
-        q->listNode[i]=memory[i];
+    node_t** address=NULL;
+    address=realloc(q->listNode, sizeof(node_t*)*(q->nbNode+1));
+    if(address==NULL){
+        perror("realloc()");
+        exit(-2);
     }
-    q->listNode[sizememory]=n;
-    free(memory);
+    q->listNode=address;
+    q->listNode[q->nbNode]=n;
+    q->nbNode++;
 }
 
 /* poll()
@@ -35,7 +34,7 @@ void offer(queue_t* q, node_t* n){
  */
 node_t* poll(queue_t* q){
     int sizememory=q->nbNode;
-    node_t** memory;
+    node_t** memory=NULL;
     memory=q->listNode;
     q->nbNode--;
     q->listNode=malloc(sizeof(node_t*)*q->nbNode);
