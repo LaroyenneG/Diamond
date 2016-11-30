@@ -101,8 +101,8 @@ void clearBoard(board_t* b) {
 }
 
 /* voidCellIndex():
- * returns the index of the frst encountered void cell, i.e.
- * a cell that contains -1. Normally, this method shoud only be called
+ * returns the index of the first encountered void cell, i.e.
+ * a cell that contains -1. Normally, this method should only be called
  * when the party is over
  */
 int voidCellIndex(board_t* b) {
@@ -183,6 +183,13 @@ void printBoard(board_t* b){
     printf("\n");
 }
 
+/* free_board()
+ * releases the memory used by the board.
+ */
+void free_board(board_t* b){
+    free(b);
+    b=NULL;
+}
 /**********************************
    functions to mangage the nodes
 ***********************************/
@@ -229,6 +236,17 @@ void printNode(node_t* n){
     printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n",n->idCell, n->turn, n->nbChildren, n->result);
 }
 
+/* free_node()
+ * releases the memory used by the node and their children.
+ */
+void free_node(node_t* n){
+    for(int i=0; i<n->nbChildren; i++){
+        free_node(n->children[i]);
+    }
+    free(n->children);
+    free(n);
+    n=NULL;
+}
 /**********************************
    functions to mangage the tree
 ***********************************/
@@ -461,6 +479,17 @@ char findGoodChoise(tree_t* t, int bleuCell){
     return nodes[bestNode]->idCell;
 }
 
+/* free_tree()
+ * releases the memory used by the tree.
+ */
+void free_tree(tree_t* t){
+    free_node(t->root);
+    t->root=NULL;
+    free(t->saveNode);
+    t->saveNode=NULL;
+    free(t);
+    t=NULL;
+}
 
 /**********************************
    functions to mangage the party
@@ -558,4 +587,16 @@ void start(party_t* p){
         printf("The winner is the bleu player\n");
     }
     color(0);
+}
+
+/* free_party()
+ * releases the memory used by the party.
+ */
+void free_party(party_t* p){
+    free_board(p->board);
+    free_tree(p->tree);
+    free(p);
+    p->tree=NULL;
+    p->board=NULL;
+    p=NULL;
 }

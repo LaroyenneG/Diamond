@@ -56,11 +56,13 @@ int voidCellIndex(board_t* b);
 void computeScore(board_t* b);
 void setPawn(board_t* b, int idCell, char value);
 void printBoard(board_t* b);
+void free_board(board_t* b);
 
 /* functions to manage the node */
 node_t* createNode(int idCell, int turn);
 node_t* addChild(node_t* n, int idCell);
 void printNode(node_t* n);
+void free_node(node_t* n);
 
 /* functions to manage the tree */
 tree_t* createTree();
@@ -74,10 +76,11 @@ int computeDraws(node_t* n);
 node_t** seekPossibility(node_t* parent, int idCell);
 int seeknbPossibility(node_t* parent, int idCell);
 char findGoodChoise(tree_t* t, int bleuCell);
+void free_tree(tree_t* t);
 
 /* functions to manage the party */
 party_t* createParty();
 char bleuPlayer(party_t* p);
 void start(party_t* p);
-
+void free_party(party_t* p);
 #endif
