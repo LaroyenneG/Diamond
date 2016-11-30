@@ -187,6 +187,8 @@ void printBoard(board_t* b){
  * releases the memory used by the board.
  */
 void free_board(board_t* b){
+    b->blueScore=0;
+    b->redScore=0;
     free(b);
     b=NULL;
 }
@@ -243,7 +245,10 @@ void free_node(node_t* n){
     for(int i=0; i<n->nbChildren; i++){
         free_node(n->children[i]);
     }
+    n->nbChildren=0;
+    n->result=0;
     free(n->children);
+    n->children=NULL;
     free(n);
     n=NULL;
 }
@@ -594,9 +599,9 @@ void start(party_t* p){
  */
 void free_party(party_t* p){
     free_board(p->board);
-    free_tree(p->tree);
-    free(p);
-    p->tree=NULL;
     p->board=NULL;
+    free_tree(p->tree);
+    p->tree=NULL;
+    free(p);
     p=NULL;
 }

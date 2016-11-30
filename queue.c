@@ -60,7 +60,6 @@ void clear(queue_t* q){
 void free_queue(queue_t* q){
     free(q->listNode);
     q->listNode=NULL;
-    q->nbNode=NULL;
     free(q);
     q=NULL;
 }
