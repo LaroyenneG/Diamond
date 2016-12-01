@@ -75,7 +75,7 @@ int computeRedVictories(node_t* n);
 int computeDraws(node_t* n);
 node_t** seekPossibility(node_t* parent, int idCell);
 int seeknbPossibility(node_t* parent, int idCell);
-char findGoodChoise(tree_t* t, int bleuCell);
+char findGoodChoice(tree_t* t, int bleuCell);
 void free_tree(tree_t* t);
 
 /* functions to manage the party */

@@ -15,6 +15,10 @@ int nbConfigurations;
 board_t* createBoard() {
     board_t* b = NULL;
     b=malloc(sizeof(board_t));
+    if(b==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
     clearBoard(b);
 
     for(int i=0; i<13; i++) {
@@ -187,8 +191,6 @@ void printBoard(board_t* b){
  * releases the memory used by the board.
  */
 void free_board(board_t* b){
-    b->blueScore=0;
-    b->redScore=0;
     free(b);
     b=NULL;
 }
@@ -199,6 +201,10 @@ void free_board(board_t* b){
 node_t* createNode(int idCell, int turn) {
     node_t* n = NULL;
     n=malloc(sizeof(node_t));
+    if(n==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
     n->idCell=(char)idCell;
     n->turn=(char)turn;
     if(turn ==1){
@@ -245,11 +251,7 @@ void free_node(node_t* n){
     for(int i=0; i<n->nbChildren; i++){
         free_node(n->children[i]);
     }
-    n->nbChildren=0;
-    n->result=0;
-    free(n->children);
-    n->children=NULL;
-    free(n);
+    free(&n);
     n=NULL;
 }
 /**********************************
@@ -258,11 +260,13 @@ void free_node(node_t* n){
 
 tree_t* createTree() {
     tree_t* t = NULL;
-
     t=malloc(sizeof(tree_t));
+    if(t==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
     t->root=NULL;
     t->saveNode=NULL;
-
     return t;
 }
 
@@ -446,11 +450,11 @@ int seeknbPossibility(node_t* parent, int idCell){
     return 0;
 }
 
-/* findGoodChoise()
+/* findGoodChoice()
  * returns the choice of the red player, depending on the choice of the blue player.
  * Searches the node with the most victory in the tree.
  */
-char findGoodChoise(tree_t* t, int bleuCell){
+char findGoodChoice(tree_t* t, int bleuCell){
     node_t** nodes=NULL;
     int nbPossibility=0;
     if(t->saveNode==NULL){
@@ -489,9 +493,6 @@ char findGoodChoise(tree_t* t, int bleuCell){
  */
 void free_tree(tree_t* t){
     free_node(t->root);
-    t->root=NULL;
-    free(t->saveNode);
-    t->saveNode=NULL;
     free(t);
     t=NULL;
 }
@@ -503,6 +504,10 @@ void free_tree(tree_t* t){
 party_t* createParty(){
     party_t* p = NULL;
     p=malloc(sizeof(party_t*));
+    if(p==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
     p->board=createBoard();
     p->tree=createTree();
     return p;
@@ -515,7 +520,7 @@ party_t* createParty(){
 char bleuPlayer(party_t* p){
     int c=-1;
     while (c<0||c>12||getPawn(p->board,c)!=NO_NEIGHBOR){
-        printf("The bleu player must play :\n");
+        printf("The blue player must play :\n");
         if(scanf("%d",&c)!=1){
            perror("Input error, the value is not of the type integer");
            exit(2);
@@ -572,7 +577,7 @@ void start(party_t* p){
             c=bleuPlayer(p);
             setPawn(p->board,c,pawn);
         }else {
-            setPawn(p->board, findGoodChoise(p->tree,(char) c),(char) (pawn+6));
+            setPawn(p->board, findGoodChoice(p->tree,(char) c),(char) (pawn+6));
         }
         turn++;
     }
@@ -589,7 +594,7 @@ void start(party_t* p){
         printf("The winner is the red player\n");
     }else {
         color(34);
-        printf("The winner is the bleu player\n");
+        printf("The winner is the blue player\n");
     }
     color(0);
 }
