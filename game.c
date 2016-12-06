@@ -19,7 +19,6 @@ int main(int argc, char** argv){
     party_t* p = createParty();
     start(p);
     free_party(p);
-    sleep(10);
     return 0;
 }
 

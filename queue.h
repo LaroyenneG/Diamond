@@ -19,6 +19,5 @@ int isEmpty(queue_t* q);
 void printQueue(queue_t* queue);
 void clear(queue_t* queue);
 void free_queue(queue_t* queue);
-void printQueue(queue_t* queue);
 
 #endif //PROJETALGOC_QUEUE_H

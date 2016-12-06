@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "queue.h"
+#include "diamond.h"
 
 queue_t* createQueue(){
     queue_t* q =NULL;
@@ -51,6 +52,7 @@ node_t* poll(queue_t* q){
 
     //free memory
     free(memory);
+    memory=NULL;
 
     return value;
 }
@@ -67,6 +69,7 @@ void clear(queue_t* q){
  * releases the memory used by the queue.
  */
 void free_queue(queue_t* q){
+    free(q->listNode);
     free(q);
     q=NULL;
 }

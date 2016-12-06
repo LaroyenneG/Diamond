@@ -248,10 +248,15 @@ void printNode(node_t* n){
  * releases the memory used by the node and their children.
  */
 void free_node(node_t* n){
-    for(int i=0; i<n->nbChildren; i++){
+
+    for(int i=n->nbChildren-1; i>=0;i--){
         free_node(n->children[i]);
+        n->children--;
     }
-    free(&n);
+
+    free(n->children);
+    n->children=NULL;
+    free(n);
     n=NULL;
 }
 /**********************************
@@ -493,6 +498,7 @@ char findGoodChoice(tree_t* t, int bleuCell){
  */
 void free_tree(tree_t* t){
     free_node(t->root);
+    t->saveNode=NULL;
     free(t);
     t=NULL;
 }
