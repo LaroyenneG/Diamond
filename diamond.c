@@ -13,8 +13,7 @@ int nbConfigurations;
    functions to mangage the board
 ***********************************/
 board_t* createBoard() {
-    board_t* b = NULL;
-    b=malloc(sizeof(board_t));
+    board_t* b=malloc(sizeof(board_t));
     if(b==NULL){
         perror("malloc()");
         exit(-2);
@@ -199,8 +198,7 @@ void free_board(board_t* b){
 ***********************************/
 
 node_t* createNode(int idCell, int turn) {
-    node_t* n = NULL;
-    n=malloc(sizeof(node_t));
+    node_t* n=malloc(sizeof(node_t));
     if(n==NULL){
         perror("malloc()");
         exit(-2);
@@ -214,6 +212,12 @@ node_t* createNode(int idCell, int turn) {
     } else {
         n->children=NULL;
     }
+
+    if(turn<12 && n->children==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
+
     n->nbChildren = 0;
     n->result = NO_RESULT;
     return n;
@@ -244,14 +248,21 @@ void printNode(node_t* n){
     printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n",n->idCell, n->turn, n->nbChildren, n->result);
 }
 
+
+
+
+
 /* free_node()
  * releases the memory used by the node and their children.
  */
 void free_node(node_t* n){
 
-    for(int i=n->nbChildren-1; i>=0;i--){
+    if(n==NULL){
+        perror("free_node()");
+        exit(-2);
+    }
+    for(int i=0; i<n->nbChildren; i++){
         free_node(n->children[i]);
-        n->children--;
     }
 
     free(n->children);
@@ -264,8 +275,7 @@ void free_node(node_t* n){
 ***********************************/
 
 tree_t* createTree() {
-    tree_t* t = NULL;
-    t=malloc(sizeof(tree_t));
+    tree_t* t =malloc(sizeof(tree_t));
     if(t==NULL){
         perror("malloc()");
         exit(-2);
@@ -497,8 +507,8 @@ char findGoodChoice(tree_t* t, int bleuCell){
  * releases the memory used by the tree.
  */
 void free_tree(tree_t* t){
-    free_node(t->root);
     t->saveNode=NULL;
+    free_node(t->root);
     free(t);
     t=NULL;
 }
@@ -508,8 +518,7 @@ void free_tree(tree_t* t){
 ***********************************/
 
 party_t* createParty(){
-    party_t* p = NULL;
-    p=malloc(sizeof(party_t*));
+    party_t* p=malloc(sizeof(party_t));
     if(p==NULL){
         perror("malloc()");
         exit(-2);
@@ -609,10 +618,10 @@ void start(party_t* p){
  * releases the memory used by the party.
  */
 void free_party(party_t* p){
-    free_board(p->board);
-    p->board=NULL;
     free_tree(p->tree);
     p->tree=NULL;
+    free_board(p->board);
+    p->board=NULL;
     free(p);
     p=NULL;
 }

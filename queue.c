@@ -8,13 +8,16 @@
 #include "diamond.h"
 
 queue_t* createQueue(){
-    queue_t* q =NULL;
-    q=malloc(sizeof(queue_t));
+    queue_t* q=malloc(sizeof(queue_t));
     if(q==NULL){
         perror("malloc()");
         exit(-2);
     }
     q->listNode=malloc(sizeof(node_t*)*0);
+    if(q->listNode==NULL){
+        perror("malloc()");
+        exit(-2);
+    }
     q->nbNode=0;
     return q;
 }

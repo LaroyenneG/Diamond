@@ -11,7 +11,6 @@ int main(int argc, char** argv){
         return 1;
     }
 
-
     clrscr();
     color(38);
     printf("Warning, the terminal background color must be black.\n");
