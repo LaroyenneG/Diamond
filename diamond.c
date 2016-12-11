@@ -336,7 +336,12 @@ void computePossibilities(node_t* n, board_t* b) {
         }
         nbConfigurations += 1;
         if ((nbConfigurations % 1000000) == 0){
-            if(fork()==0){
+            pid_t process = fork();
+            if(process==-1){
+                perror("fork()");
+                exit(-2);
+            }
+            if(process==0){
                 printf(".");
                 exit(0);
             }
