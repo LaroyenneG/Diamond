@@ -573,7 +573,7 @@ void start(party_t* p){
     setFirstBlueChoice(p->tree,p->board,idCellBlue);
     setFirstRedChoice(p->tree,p->board,idCellRed);
     color(33);
-    printf("Tree calculation in process :\n");
+    printf("Calculation of tree in progress :\n");
     buildTree(p->tree,p->board);
     color(37);
     int nbBlueVictories = computeBlueVictories(p->tree->root);
@@ -599,7 +599,7 @@ void start(party_t* p){
     clrscr();
     printBoard(p->board);
     computeScore(p->board);
-    printf("Bleu score : %d | Red score : %d\n",p->board->blueScore, p->board->redScore);
+    printf("Blue score : %d | Red score : %d\n",p->board->blueScore, p->board->redScore);
     if(p->board->blueScore==p->board->redScore){
         color(32);
         printf("Draw party\n");
