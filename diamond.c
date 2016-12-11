@@ -443,10 +443,10 @@ node_t** seekPossibility(node_t* parent, int idCell){
     return NULL;
 }
 
-/* seeknbPossibility()
+/* seekNbPossibility()
  * returns the number of game possibilities.
  */
-int seeknbPossibility(node_t* parent, int idCell){
+int seekNbPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
         return parent->nbChildren;
     }
@@ -479,10 +479,10 @@ char findGoodChoice(tree_t* t, int bleuCell){
     int nbPossibility=0;
     if(t->saveNode==NULL){
         nodes=seekPossibility(t->root, bleuCell);
-        nbPossibility=seeknbPossibility(t->root, bleuCell);
+        nbPossibility=seekNbPossibility(t->root, bleuCell);
     }else {
         nodes=seekPossibility(t->saveNode, bleuCell);
-        nbPossibility=seeknbPossibility(t->saveNode, bleuCell);
+        nbPossibility=seekNbPossibility(t->saveNode, bleuCell);
     }
     int nbWin[nbPossibility];
     int nbDraw[nbPossibility];
