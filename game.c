@@ -29,6 +29,7 @@ int main(int argc, char** argv){
             start(p);
             if(fork()==0){
                 printf("Freeing of the memory... ");
+                exit(0);
             }
             free_party(p);
             printf("done.\n");
