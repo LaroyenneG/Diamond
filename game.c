@@ -27,10 +27,7 @@ int main(int argc, char** argv){
         } else{
             party_t* p = createParty();
             start(p);
-            if(fork()==0){
-                printf("Release of the memory... ");
-                exit(0);
-            }
+            printf("Release of the memory... ");
             free_party(p);
             printf("done.\n");
         }

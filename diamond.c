@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
-#include <pthread.h>
-#include <sys/wait.h>
 #include "diamond.h"
 #include "sublimeterm.h"
 #include "queue.h"
+
 
 int nbConfigurations;
 
@@ -308,7 +307,7 @@ void setFirstRedChoice(tree_t* t, board_t* b, int idCell) {
     setPawn(b ,idCell,7);
 }
 
-/* buildTree()
+/* buildTree();
  * build the tree of all possible evolution of the party, taking into account
  * the first choice of blue and red
  */
@@ -317,7 +316,6 @@ void buildTree(tree_t* t, board_t* b) {
     computePossibilities(n,b);
     printf(" done.\n");
 }
-
 
 /* computePossibilities():
  * create all possible children of Node n.
@@ -341,8 +339,6 @@ void computePossibilities(node_t* n, board_t* b) {
             if(fork()==0){
                 printf(".");
                 exit(0);
-            } else{
-                wait(NULL);
             }
         }
         return;

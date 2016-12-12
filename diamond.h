@@ -77,6 +77,7 @@ node_t** seekPossibility(node_t* parent, int idCell);
 int seeknbPossibility(node_t* parent, int idCell);
 char findGoodChoice(tree_t* t, int bleuCell);
 void free_tree(tree_t* t);
+
 /* functions to manage the party */
 party_t* createParty();
 char bleuPlayer(party_t* p);
