@@ -9,7 +9,7 @@ all : exe
 exe : $(EXENAME)
 
 $(EXENAME) : $(OBJ)
-	gcc -g $^ -o $@
+	gcc -g -lpthread $^ -o $@
 
 clean:
 	rm -f $(OBJ)
