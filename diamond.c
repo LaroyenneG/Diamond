@@ -336,7 +336,12 @@ void computePossibilities(node_t* n, board_t* b) {
         }
         nbConfigurations += 1;
         if ((nbConfigurations % 1000000) == 0){
-            if(fork()==0){
+            pid_t process = fork();
+            if(process==-1){
+                perror("fork()");
+                exit(-2);
+            }
+            if(process==0){
                 printf(".");
                 exit(0);
             }
@@ -438,10 +443,10 @@ node_t** seekPossibility(node_t* parent, int idCell){
     return NULL;
 }
 
-/* seeknbPossibility()
+/* seekNbPossibility()
  * returns the number of game possibilities.
  */
-int seeknbPossibility(node_t* parent, int idCell){
+int seekNbPossibility(node_t* parent, int idCell){
     if(parent->idCell==idCell){
         return parent->nbChildren;
     }
@@ -474,10 +479,10 @@ char findGoodChoice(tree_t* t, int bleuCell){
     int nbPossibility=0;
     if(t->saveNode==NULL){
         nodes=seekPossibility(t->root, bleuCell);
-        nbPossibility=seeknbPossibility(t->root, bleuCell);
+        nbPossibility=seekNbPossibility(t->root, bleuCell);
     }else {
         nodes=seekPossibility(t->saveNode, bleuCell);
-        nbPossibility=seeknbPossibility(t->saveNode, bleuCell);
+        nbPossibility=seekNbPossibility(t->saveNode, bleuCell);
     }
     int nbWin[nbPossibility];
     int nbDraw[nbPossibility];
@@ -573,7 +578,7 @@ void start(party_t* p){
     setFirstBlueChoice(p->tree,p->board,idCellBlue);
     setFirstRedChoice(p->tree,p->board,idCellRed);
     color(33);
-    printf("Tree calculation in process :\n");
+    printf("Calculation of tree in progress :\n");
     buildTree(p->tree,p->board);
     color(37);
     int nbBlueVictories = computeBlueVictories(p->tree->root);
@@ -599,7 +604,7 @@ void start(party_t* p){
     clrscr();
     printBoard(p->board);
     computeScore(p->board);
-    printf("Bleu score : %d | Red score : %d\n",p->board->blueScore, p->board->redScore);
+    printf("Blue score : %d | Red score : %d\n",p->board->blueScore, p->board->redScore);
     if(p->board->blueScore==p->board->redScore){
         color(32);
         printf("Draw party\n");
