@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "queue.h"
-#include "diamond.h"
 
 queue_t* createQueue(){
     queue_t* q=malloc(sizeof(queue_t));
@@ -72,6 +71,10 @@ void clear(queue_t* q){
  * releases the memory used by the queue.
  */
 void free_queue(queue_t* q){
+    if(q==NULL){
+        perror("free_queue()");
+        exit(-3);
+    }
     free(q->listNode);
     free(q);
     q=NULL;

@@ -117,6 +117,8 @@ int voidCellIndex(board_t* b) {
     }
     return id;
 }
+
+
 /* computeScore() :
  * computes the number of points of blue/red pawns around
  * the empty cell.
@@ -178,7 +180,7 @@ void printBoard(board_t* b){
             count++;
         }
         if(grid[i]=='\n'){
-            for(int i=0; i<indentation; i++){
+            for(int x=0; x<indentation; x++){
                 printf(" ");
             }
         }
@@ -190,6 +192,10 @@ void printBoard(board_t* b){
  * releases the memory used by the board.
  */
 void free_board(board_t* b){
+    if(b==NULL){
+        perror("free_board()");
+        exit(-3);
+    }
     free(b);
     b=NULL;
 }
@@ -259,7 +265,7 @@ void free_node(node_t* n){
 
     if(n==NULL){
         perror("free_node()");
-        exit(-2);
+        exit(-3);
     }
     for(int i=0; i<n->nbChildren; i++){
         free_node(n->children[i]);
@@ -339,7 +345,7 @@ void computePossibilities(node_t* n, board_t* b) {
             pid_t process = fork();
             if(process==-1){
                 perror("fork()");
-                exit(-2);
+                exit(-1);
             }
             if(process==0){
                 printf(".");
@@ -512,6 +518,10 @@ char findGoodChoice(tree_t* t, int bleuCell){
  * releases the memory used by the tree.
  */
 void free_tree(tree_t* t){
+    if(t==NULL){
+        perror("free_tree()");
+        exit(-3);
+    }
     t->saveNode=NULL;
     free_node(t->root);
     free(t);
@@ -623,6 +633,10 @@ void start(party_t* p){
  * releases the memory used by the party.
  */
 void free_party(party_t* p){
+    if(p==NULL){
+        perror("free_party()");
+        exit(-3);
+    }
     free_tree(p->tree);
     p->tree=NULL;
     free_board(p->board);

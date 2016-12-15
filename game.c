@@ -3,7 +3,7 @@
 #include <zconf.h>
 #include "diamond.h"
 #include "sublimeterm.h"
-#include "queue.h"
+
 
 int main(int argc, char** argv){
     if(argc>1){
@@ -31,7 +31,7 @@ int main(int argc, char** argv){
             pid_t process = fork();
             if(process==-1){
                 perror("fork()");
-                exit(-2);
+                exit(-1);
             }
             if(process==0){
                 printf("Freeing of the memory... ");
@@ -42,7 +42,6 @@ int main(int argc, char** argv){
             printf("done.\n");
         }
     }
-
     return 0;
 }
 
