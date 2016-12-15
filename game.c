@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <zconf.h>
+#include <sys/types.h>
 #include "diamond.h"
 #include "sublimeterm.h"
 

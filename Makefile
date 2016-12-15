@@ -2,7 +2,7 @@ OBJ := diamond.o game.o queue.o sublimeterm.o
 EXENAME := diamond
 
 CC := gcc
-CFLAGS := -Wall -O3 -g
+CFLAGS := -std=c99 -Wall -O3 -g
 
 all : exe
 
