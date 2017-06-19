@@ -8,8 +8,8 @@
 /* color()
  * changes the color of the text written in the terminal.
  */
-void color(int i){
-    switch(i){
+void color(int i) {
+    switch (i) {
         case 30:
             printf(noir);
             break;

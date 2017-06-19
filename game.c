@@ -6,37 +6,37 @@
 #include "sublimeterm.h"
 
 
-int main(int argc, char** argv){
-    if(argc>1){
+int main(int argc, char **argv) {
+    if (argc > 1) {
         perror("Usage: diamond");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     clrscr();
     color(38);
     printf("Warning, the terminal background color must be black.\n");
     color(0);
-    int y=1;
-    while (y){
+    int y = 1;
+    while (y) {
         printf("Do you want to play ? (yes=1/no=0)\n");
-        if(scanf("%d",&y)!=1){
+        if (scanf("%d", &y) != 1) {
             perror("Input error, the value is not of the type integer");
-            exit(2);
+            exit(EXIT_FAILURE);
         }
-        if(y!=1){
-            y=0;
-        } else{
-            party_t* p = createParty();
+        if (y != 1) {
+            y = 0;
+        } else {
+            party_t *p = createParty();
             start(p);
 
             pid_t process = fork();
-            if(process==-1){
+            if (process == -1) {
                 perror("fork()");
-                exit(-1);
+                exit(EXIT_FAILURE);
             }
-            if(process==0){
+            if (process == 0) {
                 printf("Freeing of the memory... ");
-                exit(0);
+                exit(EXIT_SUCCESS);
             }
 
             free_party(p);
@@ -45,6 +45,3 @@ int main(int argc, char** argv){
     }
     return 0;
 }
-
-
-

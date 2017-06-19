@@ -13,16 +13,16 @@ int nbConfigurations;
 /**********************************
    functions to mangage the board
 ***********************************/
-board_t* createBoard() {
-    board_t* b=malloc(sizeof(board_t));
-    if(b==NULL){
+board_t *createBoard() {
+    board_t *b = malloc(sizeof(board_t));
+    if (b == NULL) {
         perror("malloc()");
-        exit(-2);
+        exit(EXIT_FAILURE);
     }
     clearBoard(b);
 
-    for(int i=0; i<13; i++) {
-        for(int j=0;j<6;j++) {
+    for (int i = 0; i < 13; i++) {
+        for (int j = 0; j < 6; j++) {
             b->neighbors[i][j] = NO_NEIGHBOR;
         }
     }
@@ -96,8 +96,8 @@ board_t* createBoard() {
     return b;
 }
 
-void clearBoard(board_t* b) {
-    for(int i=0;i<13;i++) {
+void clearBoard(board_t *b) {
+    for (int i = 0; i < 13; i++) {
         b->board[i] = VOID_CELL;
     }
     b->blueScore = 0;
@@ -109,9 +109,9 @@ void clearBoard(board_t* b) {
  * a cell that contains -1. Normally, this method should only be called
  * when the party is over
  */
-int voidCellIndex(board_t* b) {
+int voidCellIndex(board_t *b) {
     int id = -1;
-    for(int i=0;i<13;i++) {
+    for (int i = 0; i < 13; i++) {
         if (b->board[i] == VOID_CELL) {
             return i;
         }
@@ -127,17 +127,16 @@ int voidCellIndex(board_t* b) {
  * CAUTION : this method should be called only
  * if the party is over, i.e. when there is a single void cell.
 */
-void computeScore(board_t* b) {
+void computeScore(board_t *b) {
     b->blueScore = 0;
     b->redScore = 0;
     int idVoid = voidCellIndex(b);
-    for(int i=0;i<6;i++) {
+    for (int i = 0; i < 6; i++) {
         if (b->neighbors[idVoid][i] != NO_NEIGHBOR) {
-            if (b->board[(int)b->neighbors[idVoid][i]] <= 6) {
-                b->blueScore += b->board[(int)b->neighbors[idVoid][i]];
-            }
-            else {
-                b->redScore += (b->board[(int)b->neighbors[idVoid][i]]-6);
+            if (b->board[(int) b->neighbors[idVoid][i]] <= 6) {
+                b->blueScore += b->board[(int) b->neighbors[idVoid][i]];
+            } else {
+                b->redScore += (b->board[(int) b->neighbors[idVoid][i]] - 6);
             }
         }
     }
@@ -146,42 +145,47 @@ void computeScore(board_t* b) {
 /* setPawn() :
  * put a pawn of the given value at idCell in the board.
  */
-void setPawn(board_t* b, int idCell, char value) {
+void setPawn(board_t *b, int idCell, char value) {
     b->board[idCell] = value;
 }
 
 /* getPawn()
  * returns the value of the pawn to the given idCell.
  */
-char getPawn(board_t* b, int idCell) { return b->board[idCell]; }
+char getPawn(board_t *b, int idCell) { return b->board[idCell]; }
 
 /* printBoard()
  * displays the board in the terminal.
  */
-void printBoard(board_t* b){
-    int indentation=5;
-    const char grid[] ={'\n',' ','+','-','+','-','+','-','+','\n',' ','|','n','|','n','|','n','|','\n','+','-','+','-','+','-','+','-','+','\n','|','n','|','n','|','n','|','n','|','\n','+','-','+','-','+','-','+','-','+','\n',' ','|','n','|','n','|','n','|','\n',' ','+','-','+','-','+','-','+','\n',' ',' ','|','n','|','n','|','\n',' ',' ','+','-','+','-','+','\n',' ',' ',' ','|','n','|','\n',' ',' ',' ','+','-','+','\n'};
-    int count=0;
-    for (int i=0; i<97;i++){
+void printBoard(board_t *b) {
+    int indentation = 5;
+    const char grid[] = {'\n', ' ', '+', '-', '+', '-', '+', '-', '+', '\n', ' ', '|', 'n', '|', 'n', '|', 'n', '|',
+                         '\n', '+', '-', '+', '-', '+', '-', '+', '-', '+', '\n', '|', 'n', '|', 'n', '|', 'n', '|',
+                         'n', '|', '\n', '+', '-', '+', '-', '+', '-', '+', '-', '+', '\n', ' ', '|', 'n', '|', 'n',
+                         '|', 'n', '|', '\n', ' ', '+', '-', '+', '-', '+', '-', '+', '\n', ' ', ' ', '|', 'n', '|',
+                         'n', '|', '\n', ' ', ' ', '+', '-', '+', '-', '+', '\n', ' ', ' ', ' ', '|', 'n', '|', '\n',
+                         ' ', ' ', ' ', '+', '-', '+', '\n'};
+    int count = 0;
+    for (int i = 0; i < 97; i++) {
         color(37);
-        if(grid[i]!='n'){
-            printf("%c",grid[i]);
-        }else {
-            if(b->board[count]==NO_NEIGHBOR){
-                printf("%d",count);
-            }else {
-                if(b->board[count]<=6){
+        if (grid[i] != 'n') {
+            printf("%c", grid[i]);
+        } else {
+            if (b->board[count] == NO_NEIGHBOR) {
+                printf("%d", count);
+            } else {
+                if (b->board[count] <= 6) {
                     color(34);
-                    printf("%d",b->board[count]);
-                }else{
+                    printf("%d", b->board[count]);
+                } else {
                     color(35);
-                    printf("%d",b->board[count]-6);
+                    printf("%d", b->board[count] - 6);
                 }
             }
             count++;
         }
-        if(grid[i]=='\n'){
-            for(int x=0; x<indentation; x++){
+        if (grid[i] == '\n') {
+            for (int x = 0; x < indentation; x++) {
                 printf(" ");
             }
         }
@@ -192,37 +196,38 @@ void printBoard(board_t* b){
 /* free_board()
  * releases the memory used by the board.
  */
-void free_board(board_t* b){
-    if(b==NULL){
+void free_board(board_t *b) {
+    if (b == NULL) {
         perror("free_board()");
         exit(-3);
     }
     free(b);
-    b=NULL;
+    b = NULL;
 }
+
 /**********************************
    functions to mangage the nodes
 ***********************************/
 
-node_t* createNode(int idCell, int turn) {
-    node_t* n=malloc(sizeof(node_t));
-    if(n==NULL){
+node_t *createNode(int idCell, int turn) {
+    node_t *n = malloc(sizeof(node_t));
+    if (n == NULL) {
         perror("malloc()");
-        exit(-2);
+        exit(EXIT_FAILURE);
     }
-    n->idCell=(char)idCell;
-    n->turn=(char)turn;
-    if(turn ==1){
-        n->children=malloc(sizeof(node_t*));
-    } else if (turn<12){
-        n->children=malloc(sizeof(node_t*)*(13-turn));
+    n->idCell = (char) idCell;
+    n->turn = (char) turn;
+    if (turn == 1) {
+        n->children = malloc(sizeof(node_t *));
+    } else if (turn < 12) {
+        n->children = malloc(sizeof(node_t *) * (13 - turn));
     } else {
-        n->children=NULL;
+        n->children = NULL;
     }
 
-    if(turn<12 && n->children==NULL){
+    if (turn < 12 && n->children == NULL) {
         perror("malloc()");
-        exit(-2);
+        exit(EXIT_FAILURE);
     }
 
     n->nbChildren = 0;
@@ -240,10 +245,10 @@ node_t* createNode(int idCell, int turn) {
  * done outside this method, i.e. in the method that builds the tree, thus
  * in the Tree class.
  */
-node_t* addChild(node_t* n, int idCell) {
-    node_t* child = NULL;
-    child=createNode(idCell, n->turn+1);
-    n->children[(int)n->nbChildren]=child;
+node_t *addChild(node_t *n, int idCell) {
+    node_t *child = NULL;
+    child = createNode(idCell, n->turn + 1);
+    n->children[(int) n->nbChildren] = child;
     n->nbChildren += 1;
     return child;
 }
@@ -251,44 +256,42 @@ node_t* addChild(node_t* n, int idCell) {
 /* printBoard()
  * displays the node in the terminal.
  */
-void printNode(node_t* n){
-    printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n",n->idCell, n->turn, n->nbChildren, n->result);
+void printNode(node_t *n) {
+    printf("Node :\n idClell= %d\n turn= %d\n nbChildren= %d\n result= %d\n", n->idCell, n->turn, n->nbChildren,
+           n->result);
 }
-
-
-
 
 
 /* free_node()
  * releases the memory used by the node and their children.
  */
-void free_node(node_t* n){
+void free_node(node_t *n) {
 
-    if(n==NULL){
+    if (n == NULL) {
         perror("free_node()");
-        exit(-3);
+        exit(EXIT_FAILURE);
     }
-    for(int i=0; i<n->nbChildren; i++){
+    for (int i = 0; i < n->nbChildren; i++) {
         free_node(n->children[i]);
     }
 
     free(n->children);
-    n->children=NULL;
+    n->children = NULL;
     free(n);
-    n=NULL;
 }
+
 /**********************************
    functions to mangage the tree
 ***********************************/
 
-tree_t* createTree() {
-    tree_t* t =malloc(sizeof(tree_t));
-    if(t==NULL){
+tree_t *createTree() {
+    tree_t *t = malloc(sizeof(tree_t));
+    if (t == NULL) {
         perror("malloc()");
-        exit(-2);
+        exit(EXIT_FAILURE);
     }
-    t->root=NULL;
-    t->saveNode=NULL;
+    t->root = NULL;
+    t->saveNode = NULL;
     return t;
 }
 
@@ -298,9 +301,9 @@ tree_t* createTree() {
  *
  * CAUTION: it also sets the pawn in the board
  */
-void setFirstBlueChoice(tree_t* t, board_t* b, int idCell) {
-    t->root=createNode(idCell,1);
-    setPawn(b ,idCell,1);
+void setFirstBlueChoice(tree_t *t, board_t *b, int idCell) {
+    t->root = createNode(idCell, 1);
+    setPawn(b, idCell, 1);
 }
 
 /* setFirstRedChoice():
@@ -309,60 +312,58 @@ void setFirstBlueChoice(tree_t* t, board_t* b, int idCell) {
  *
  * CAUTION: it also sets the pawn in the board
  */
-void setFirstRedChoice(tree_t* t, board_t* b, int idCell) {
+void setFirstRedChoice(tree_t *t, board_t *b, int idCell) {
     addChild(t->root, idCell);
-    setPawn(b ,idCell,7);
+    setPawn(b, idCell, 7);
 }
 
 /* buildTree();
  * build the tree of all possible evolution of the party, taking into account
  * the first choice of blue and red
  */
-void buildTree(tree_t* t, board_t* b) {
-    node_t* n = t->root->children[0];
-    computePossibilities(n,b);
+void buildTree(tree_t *t, board_t *b) {
+    node_t *n = t->root->children[0];
+    computePossibilities(n, b);
     printf(" done.\n");
 }
 
 /* computePossibilities():
  * create all possible children of Node n.
  */
-void computePossibilities(node_t* n, board_t* b) {
+void computePossibilities(node_t *n, board_t *b) {
     if (n->turn == 12) {
         computeScore(b);
         int red = b->redScore;
         int blue = b->blueScore;
         if (blue == red) {
             n->result = DRAW_PARTY;
-        }
-        else if (blue < red) {
+        } else if (blue < red) {
             n->result = BLUE_WINS;
-        }
-        else {
+        } else {
             n->result = RED_WINS;
         }
         nbConfigurations += 1;
-        if ((nbConfigurations % 1000000) == 0){
+        if ((nbConfigurations % 1000000) == 0) {
             pid_t process = fork();
-            if(process==-1){
+            if (process < 0) {
                 perror("fork()");
-                exit(-1);
+                exit(EXIT_FAILURE);
             }
-            if(process==0){
+            if (process == 0) {
                 printf(".");
-                exit(0);
+                exit(EXIT_SUCCESS);
             }
         }
         return;
     }
-    int nextPawnValue = (n->turn+2)/2;
-    if ((n->turn+1)%2 == 0) nextPawnValue += 6;
-    for(int i=0;i<13;i++) {
+    int nextPawnValue = (n->turn + 2) / 2;
+    if ((n->turn + 1) % 2 == 0) nextPawnValue += 6;
+    for (int i = 0; i < 13; i++) {
         if (b->board[i] == VOID_CELL) {
-            setPawn(b,i,(char)nextPawnValue);
-            node_t* child = addChild(n,i);
+            setPawn(b, i, (char) nextPawnValue);
+            node_t *child = addChild(n, i);
             computePossibilities(child, b);
-            setPawn(b,i,VOID_CELL);
+            setPawn(b, i, VOID_CELL);
         }
     }
 }
@@ -372,16 +373,16 @@ void computePossibilities(node_t* n, board_t* b) {
  * in the tree that begins with n. This can be done
  * by using the value of result attribute in leaves.
  */
-int computeBlueVictories(node_t* n) {
+int computeBlueVictories(node_t *n) {
     int nb = 0;
-    if(n->nbChildren==0){
-        if(n->result==BLUE_WINS){
+    if (n->nbChildren == 0) {
+        if (n->result == BLUE_WINS) {
             return 1;
         }
         return 0;
     }
-    for(int i=0; i<n->nbChildren; i++){
-        nb+=computeBlueVictories(n->children[i]);
+    for (int i = 0; i < n->nbChildren; i++) {
+        nb += computeBlueVictories(n->children[i]);
     }
     return nb;
 }
@@ -391,16 +392,16 @@ int computeBlueVictories(node_t* n) {
  * in the tree that begins with n. This can be done
  * by using the value of result attribute in leaves.
  */
-int computeRedVictories(node_t* n) {
+int computeRedVictories(node_t *n) {
     int nb = 0;
-    if(n->nbChildren==0){
-        if(n->result==RED_WINS){
+    if (n->nbChildren == 0) {
+        if (n->result == RED_WINS) {
             return 1;
         }
         return 0;
     }
-    for(int i=0; i<n->nbChildren; i++){
-        nb+=computeRedVictories(n->children[i]);
+    for (int i = 0; i < n->nbChildren; i++) {
+        nb += computeRedVictories(n->children[i]);
     }
     return nb;
 }
@@ -410,16 +411,16 @@ int computeRedVictories(node_t* n) {
  * are draw in the tree that begins with n. This can be done
  * by using the value of result attribute in leaves.
  */
-int computeDraws(node_t* n) {
+int computeDraws(node_t *n) {
     int nb = 0;
-    if(n->nbChildren==0){
-        if(n->result==DRAW_PARTY){
+    if (n->nbChildren == 0) {
+        if (n->result == DRAW_PARTY) {
             return 1;
         }
         return 0;
     }
-    for(int i=0; i<n->nbChildren; i++){
-        nb+=computeDraws(n->children[i]);
+    for (int i = 0; i < n->nbChildren; i++) {
+        nb += computeDraws(n->children[i]);
     }
     return nb;
 }
@@ -427,21 +428,21 @@ int computeDraws(node_t* n) {
 /* seekPossibility()
  * returns the list of possible nodes to play.
  */
-node_t** seekPossibility(node_t* parent, int idCell){
-    if(parent->idCell==idCell){
+node_t **seekPossibility(node_t *parent, int idCell) {
+    if (parent->idCell == idCell) {
         return parent->children;
     }
-    queue_t* queue = createQueue();
-    for(int i=0; i<parent->nbChildren; i++){
+    queue_t *queue = createQueue();
+    for (int i = 0; i < parent->nbChildren; i++) {
         offer(queue, parent->children[i]);
     }
-    while (!isEmpty(queue)){
-        node_t* n = poll(queue);
-        if(n->idCell==idCell){
+    while (!isEmpty(queue)) {
+        node_t *n = poll(queue);
+        if (n->idCell == idCell) {
             free_queue(queue);
             return n->children;
-        }else {
-            for(int i=0; i<n->nbChildren; i++){
+        } else {
+            for (int i = 0; i < n->nbChildren; i++) {
                 offer(queue, n->children[i]);
             }
         }
@@ -453,22 +454,22 @@ node_t** seekPossibility(node_t* parent, int idCell){
 /* seekNbPossibility()
  * returns the number of game possibilities.
  */
-int seekNbPossibility(node_t* parent, int idCell){
-    if(parent->idCell==idCell){
+int seekNbPossibility(node_t *parent, int idCell) {
+    if (parent->idCell == idCell) {
         return parent->nbChildren;
     }
-    queue_t* queue = createQueue();
-    for(int i=0; i<parent->nbChildren; i++){
+    queue_t *queue = createQueue();
+    for (int i = 0; i < parent->nbChildren; i++) {
         offer(queue, parent->children[i]);
     }
-    while (!isEmpty(queue)){
-        node_t* n = poll(queue);
+    while (!isEmpty(queue)) {
+        node_t *n = poll(queue);
 
-        if(n->idCell==idCell){
+        if (n->idCell == idCell) {
             free_queue(queue);
             return n->nbChildren;
-        }else {
-            for(int i=0; i<n->nbChildren; i++){
+        } else {
+            for (int i = 0; i < n->nbChildren; i++) {
                 offer(queue, n->children[i]);
             }
         }
@@ -481,80 +482,79 @@ int seekNbPossibility(node_t* parent, int idCell){
  * returns the choice of the red player, depending on the choice of the blue player.
  * Searches the node with the most victory in the tree.
  */
-char findGoodChoice(tree_t* t, int bleuCell){
-    node_t** nodes=NULL;
-    int nbPossibility=0;
-    if(t->saveNode==NULL){
-        nodes=seekPossibility(t->root, bleuCell);
-        nbPossibility=seekNbPossibility(t->root, bleuCell);
-    }else {
-        nodes=seekPossibility(t->saveNode, bleuCell);
-        nbPossibility=seekNbPossibility(t->saveNode, bleuCell);
+char findGoodChoice(tree_t *t, int bleuCell) {
+    node_t **nodes = NULL;
+    int nbPossibility = 0;
+    if (t->saveNode == NULL) {
+        nodes = seekPossibility(t->root, bleuCell);
+        nbPossibility = seekNbPossibility(t->root, bleuCell);
+    } else {
+        nodes = seekPossibility(t->saveNode, bleuCell);
+        nbPossibility = seekNbPossibility(t->saveNode, bleuCell);
     }
     int nbWin[nbPossibility];
     int nbDraw[nbPossibility];
-    for (int i=0; i<nbPossibility; i++){
-        nbWin[i]=computeRedVictories(nodes[i]);
-        nbDraw[i]=computeDraws(nodes[i]);
+    for (int i = 0; i < nbPossibility; i++) {
+        nbWin[i] = computeRedVictories(nodes[i]);
+        nbDraw[i] = computeDraws(nodes[i]);
     }
-    int bestNode=0;
-    int bestStat=0;
-    for (int i=0; i<nbPossibility;i++){
-        if(bestStat<nbWin[i]){
-            bestNode=i;
-            bestStat=nbWin[i];
+    int bestNode = 0;
+    int bestStat = 0;
+    for (int i = 0; i < nbPossibility; i++) {
+        if (bestStat < nbWin[i]) {
+            bestNode = i;
+            bestStat = nbWin[i];
         }
     }
-    for (int i=0; i<nbPossibility;i++){
-        if(bestStat<nbDraw[i]){
-            bestNode=i;
-            bestStat=nbDraw[i];
+    for (int i = 0; i < nbPossibility; i++) {
+        if (bestStat < nbDraw[i]) {
+            bestNode = i;
+            bestStat = nbDraw[i];
         }
     }
-    t->saveNode=nodes[bestNode];
+    t->saveNode = nodes[bestNode];
     return nodes[bestNode]->idCell;
 }
 
 /* free_tree()
  * releases the memory used by the tree.
  */
-void free_tree(tree_t* t){
-    if(t==NULL){
+void free_tree(tree_t *t) {
+    if (t == NULL) {
         perror("free_tree()");
-        exit(-3);
+        exit(EXIT_FAILURE);
     }
-    t->saveNode=NULL;
+    t->saveNode = NULL;
     free_node(t->root);
     free(t);
-    t=NULL;
 }
 
 /**********************************
    functions to mangage the party
 ***********************************/
 
-party_t* createParty(){
-    party_t* p=malloc(sizeof(party_t));
-    if(p==NULL){
+party_t *createParty() {
+    party_t *p = malloc(sizeof(party_t));
+    if (p == NULL) {
         perror("malloc()");
-        exit(-2);
+        exit(EXIT_FAILURE);
     }
-    p->board=createBoard();
-    p->tree=createTree();
+    p->board = createBoard();
+    p->tree = createTree();
     return p;
 }
 
-/* bleuPlayer()
+/* bluePlayer()
  * ask the player a cell, check if the cell to enter
  * is correct then return the choice of the blue player.
  */
-char bleuPlayer(party_t* p){
-    int c=-1;
-    while (c<0||c>12||getPawn(p->board,c)!=NO_NEIGHBOR){
+char bluePlayer(party_t *p) {
+    int c = -1;
+    while (c < 0 || c > 12 || getPawn(p->board, c) != NO_NEIGHBOR) {
         printf("The blue player must play :\n");
-        if(scanf("%d",&c)!=1){
-           perror("Input error, the value is not of the type integer");
-           exit(2);
+        if (scanf("%d", &c) != 1) {
+            perror("Input error, the value is not of the type integer");
+            exit(EXIT_FAILURE);
         }
     }
     return (char) c;
@@ -563,67 +563,68 @@ char bleuPlayer(party_t* p){
 /* start()
  * manages the complete game.
  */
-void start(party_t* p){
+void start(party_t *p) {
     clearBoard(p->board);
     color(36);
     printf("Game start\n");
     color(37);
-    char turn=1;
-    char pawn=1;
-    printf("Turn number %d\n",turn);
+    char turn = 1;
+    char pawn = 1;
+    printf("Turn number %d\n", turn);
     printBoard(p->board);
-    int idCellBlue = bleuPlayer(p);
-    setPawn(p->board,idCellBlue,pawn);
+    int idCellBlue = bluePlayer(p);
+    setPawn(p->board, idCellBlue, pawn);
     turn++;
     srand((unsigned int) time(NULL));
-    int idCellRed = rand()%12;
-    while (getPawn(p->board,idCellRed)!=NO_NEIGHBOR){
-        if(idCellRed<12){
+    int idCellRed = rand() % 12;
+    while (getPawn(p->board, idCellRed) != NO_NEIGHBOR) {
+        if (idCellRed < 12) {
             idCellRed++;
-        }else{
+        } else {
             idCellRed--;
         }
     }
     setPawn(p->board, idCellRed, (char) (pawn + 6));
     turn++;
-    setFirstBlueChoice(p->tree,p->board,idCellBlue);
-    setFirstRedChoice(p->tree,p->board,idCellRed);
+    setFirstBlueChoice(p->tree, p->board, idCellBlue);
+    setFirstRedChoice(p->tree, p->board, idCellRed);
     color(33);
     printf("Calculation of tree in progress :\n");
-    buildTree(p->tree,p->board);
+    buildTree(p->tree, p->board);
     color(37);
     int nbBlueVictories = computeBlueVictories(p->tree->root);
     int nbRedVictories = computeRedVictories(p->tree->root);
     int nbDraws = computeDraws(p->tree->root);
-    printf("nb configuration: %d, nb blue victories: %d, nb red victories: %d, nb draws: %d\n",nbConfigurations,nbBlueVictories, nbRedVictories, nbDraws);
+    printf("nb configuration: %d, nb blue victories: %d, nb red victories: %d, nb draws: %d\n", nbConfigurations,
+           nbBlueVictories, nbRedVictories, nbDraws);
     sleep(2);
-    int c=-1;
-    while (turn<=12){
+    int c = -1;
+    while (turn <= 12) {
         clrscr();
-        printf("Turn number %d\n",turn);
+        printf("Turn number %d\n", turn);
         printBoard(p->board);
 
-        if(turn%2==1){
+        if (turn % 2 == 1) {
             pawn++;
-            c=bleuPlayer(p);
-            setPawn(p->board,c,pawn);
-        }else {
-            setPawn(p->board, findGoodChoice(p->tree,(char) c),(char) (pawn+6));
+            c = bluePlayer(p);
+            setPawn(p->board, c, pawn);
+        } else {
+            setPawn(p->board, findGoodChoice(p->tree, (char) c), (char) (pawn + 6));
         }
         turn++;
     }
     clrscr();
     printBoard(p->board);
     computeScore(p->board);
-    printf("Blue score : %d | Red score : %d\n",p->board->blueScore, p->board->redScore);
-    if(p->board->blueScore==p->board->redScore){
+    printf("Blue score : %d | Red score : %d\n", p->board->blueScore, p->board->redScore);
+    if (p->board->blueScore == p->board->redScore) {
         color(32);
         printf("Draw party\n");
-    }else if (p->board->blueScore>p->board->redScore){
+    } else if (p->board->blueScore > p->board->redScore) {
         color(31);
         printf("Game over :/\n");
         printf("The winner is the red player\n");
-    }else {
+    } else {
         color(34);
         printf("The winner is the blue player\n");
     }
@@ -633,15 +634,14 @@ void start(party_t* p){
 /* free_party()
  * releases the memory used by the party.
  */
-void free_party(party_t* p){
-    if(p==NULL){
+void free_party(party_t *p) {
+    if (p == NULL) {
         perror("free_party()");
-        exit(-3);
+        exit(EXIT_FAILURE);
     }
     free_tree(p->tree);
-    p->tree=NULL;
+    p->tree = NULL;
     free_board(p->board);
-    p->board=NULL;
+    p->board = NULL;
     free(p);
-    p=NULL;
 }
