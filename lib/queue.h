@@ -5,7 +5,7 @@
 #ifndef PROJETALGOC_QUEUE_H
 #define PROJETALGOC_QUEUE_H
 
-#include "diamond.h"
+#include "../src/diamond.h"
 
 typedef struct queue {
     node_t** listNode;

@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <time.h>
 #include "diamond.h"
-#include "sublimeterm.h"
-#include "queue.h"
+#include "../lib/sublimeterm.h"
+#include "../lib/queue.h"
 
 
 int nbConfigurations;
@@ -344,15 +343,8 @@ void computePossibilities(node_t *n, board_t *b) {
         }
         nbConfigurations += 1;
         if ((nbConfigurations % 1000000) == 0) {
-            pid_t process = fork();
-            if (process < 0) {
-                perror("fork()");
-                exit(EXIT_FAILURE);
-            }
-            if (process == 0) {
-                printf(".");
-                exit(EXIT_SUCCESS);
-            }
+            printf(".");
+            fflush(stdout);
         }
         return;
     }

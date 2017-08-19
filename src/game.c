@@ -3,7 +3,7 @@
 #include <zconf.h>
 #include <sys/types.h>
 #include "diamond.h"
-#include "sublimeterm.h"
+#include "../lib/sublimeterm.h"
 
 
 int main(int argc, char **argv) {
