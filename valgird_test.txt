@@ -1,0 +1,9 @@
+==2061==
+==2061== HEAP SUMMARY: 
+==2061==	in use at exit: 0 bytes In 0 blocks 
+==2861==     total heap usage: 97,260,295 allocs, 97,260,295 frees, 2,194,939,804 bytes allocated 
+==2061== 
+==2061== All heap blocks were freed -- no leaks are possible 
+==2061= 
+==2061== For counts of detected and suppressed errors, rerun with: -v 
+==2061== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from O) 
