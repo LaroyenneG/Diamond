@@ -1,7 +1,7 @@
 ==2061==
 ==2061== HEAP SUMMARY: 
 ==2061==	in use at exit: 0 bytes In 0 blocks 
-==2861==     total heap usage: 97,260,295 allocs, 97,260,295 frees, 2,194,939,804 bytes allocated 
+==2061==     total heap usage: 97,260,295 allocs, 97,260,295 frees, 2,194,939,804 bytes allocated 
 ==2061== 
 ==2061== All heap blocks were freed -- no leaks are possible 
 ==2061== 
