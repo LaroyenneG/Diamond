@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <zconf.h>
-#include <sys/types.h>
+
 #include "diamond.h"
 #include "../lib/sublimeterm.h"
 
@@ -29,15 +28,9 @@ int main(int argc, char **argv) {
             party_t *p = createParty();
             start(p);
 
-            pid_t process = fork();
-            if (process == -1) {
-                perror("fork()");
-                exit(EXIT_FAILURE);
-            }
-            if (process == 0) {
-                printf("Freeing of the memory... ");
-                exit(EXIT_SUCCESS);
-            }
+
+            printf("Freeing of the memory... ");
+            fflush(stdout);
 
             free_party(p);
             printf("done.\n");

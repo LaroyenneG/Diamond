@@ -12,11 +12,7 @@ queue_t *createQueue() {
         perror("malloc()");
         exit(EXIT_FAILURE);
     }
-    q->listNode = malloc(sizeof(node_t *) * 0);
-    if (q->listNode == NULL) {
-        perror("malloc()");
-        exit(EXIT_FAILURE);
-    }
+    q->listNode = NULL;
     q->nbNode = 0;
     return q;
 }
@@ -25,7 +21,11 @@ queue_t *createQueue() {
  * adds a node at the end of the queue.
  */
 void offer(queue_t *q, node_t *n) {
-    q->listNode = realloc(q->listNode, sizeof(node_t *) * (q->nbNode + 1));
+    if (q->nbNode <= 0) {
+        q->listNode = malloc(sizeof(node_t *) * (q->nbNode + 1));
+    } else {
+        q->listNode = realloc(q->listNode, sizeof(node_t *) * (q->nbNode + 1));
+    }
     if (q->listNode == NULL) {
         perror("realloc()");
         exit(EXIT_FAILURE);
@@ -50,7 +50,7 @@ node_t *poll(queue_t *q) {
     for (int i = 0; i < size_memory - 1; i++) {
         q->listNode[i] = memory[i + 1];
     }
-    node_t *value = memory[0];
+    node_t *value = *memory;
 
     //free memory
     free(memory);
@@ -63,7 +63,8 @@ node_t *poll(queue_t *q) {
  */
 void clear(queue_t *q) {
     free(q->listNode);
-    q->listNode = malloc(sizeof(node_t *) * 0);
+    q->listNode = NULL;
+    q->nbNode = 0;
 }
 
 /* free_queue()
@@ -71,10 +72,9 @@ void clear(queue_t *q) {
  */
 void free_queue(queue_t *q) {
     if (q == NULL) {
-        perror("free_queue()");
-        exit(EXIT_FAILURE);
+        return;
     }
-    free(q->listNode);
+    clear(q);
     free(q);
 
 }
