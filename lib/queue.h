@@ -1,20 +1,19 @@
 //
-// Created by guillaume on 06/11/16.
+// Created by Guillaume LAROYENNE on 06/11/16.
 //
 
 #ifndef PROJETALGOC_QUEUE_H
 #define PROJETALGOC_QUEUE_H
 
-#include "../src/diamond.h"
 
 typedef struct queue {
-    node_t** listNode;
+    void** listNode;
     int nbNode;
 } queue_t;
 
 queue_t* createQueue();
 node_t* poll(queue_t* q);
-void offer(queue_t* q, node_t* n);
+void offer(queue_t* q, void* n);
 int isEmpty(queue_t* q);
 void printQueue(queue_t* queue);
 void clear(queue_t* queue);
