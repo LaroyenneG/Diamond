@@ -12,42 +12,42 @@ queue_t *createQueue() {
         perror("malloc()");
         exit(EXIT_FAILURE);
     }
-    q->listNode = NULL;
-    q->nbNode = 0;
+    q->elements = NULL;
+    q->nbElements = 0;
     return q;
 }
 
 /* offer()
  * adds a node at the end of the queue.
  */
-void offer(queue_t *q, node_t *n) {
-    if (q->nbNode <= 0) {
-        q->listNode = malloc(sizeof(void *) * (q->nbNode + 1));
+void offer(queue_t *q, void *n) {
+    if (q->nbElements <= 0) {
+        q->elements = malloc(sizeof(void *) * (q->nbElements + 1));
     } else {
-        q->listNode = realloc(q->listNode, sizeof(void *) * (q->nbNode + 1));
+        q->elements = realloc(q->elements, sizeof(void *) * (q->nbElements + 1));
     }
-    if (q->listNode == NULL) {
+    if (q->elements == NULL) {
         perror("realloc()");
         exit(EXIT_FAILURE);
     }
-    q->listNode[q->nbNode] = n;
-    q->nbNode++;
+    q->elements[q->nbElements] = n;
+    q->nbElements++;
 }
 
 /* poll()
  * returns the node at the beginning of the queue and removes it.
  */
 void *poll(queue_t *q) {
-    int size_memory = q->nbNode;
-    void **memory = q->listNode;
-    q->nbNode--;
-    q->listNode = malloc(sizeof(void *) * q->nbNode);
-    if (q->listNode == NULL) {
+    int size_memory = q->nbElements;
+    void **memory = q->elements;
+    q->nbElements--;
+    q->elements = malloc(sizeof(void *) * q->nbElements);
+    if (q->elements == NULL) {
         perror("malloc()");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < size_memory - 1; i++) {
-        q->listNode[i] = memory[i + 1];
+        q->elements[i] = memory[i + 1];
     }
     void *value = *memory;
 
@@ -61,9 +61,9 @@ void *poll(queue_t *q) {
  * empty the contents of the queue.
  */
 void clear(queue_t *q) {
-    free(q->listNode);
-    q->listNode = NULL;
-    q->nbNode = 0;
+    free(q->elements);
+    q->elements = NULL;
+    q->nbElements = 0;
 }
 
 /* free_queue()
@@ -82,7 +82,7 @@ void free_queue(queue_t *q) {
  * returns 1 if the queue is empty, else 0.
  */
 int isEmpty(queue_t *q) {
-    if (q->nbNode > 0) {
+    if (q->nbElements > 0) {
         return 0;
     }
     return 1;

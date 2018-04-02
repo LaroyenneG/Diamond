@@ -1,5 +1,5 @@
 //
-// Created by guillaume on 06/11/16.
+// Created by Guillaume LAROYENNE on 06/11/16.
 //
 
 #ifndef __DIAMOND_H__
