@@ -1,5 +1,5 @@
 //
-// Created by guillaume on 06/11/16.
+// Created by Guillaume LAROYENNE on 06/11/16.
 //
 
 #include <stdlib.h>
@@ -22,9 +22,9 @@ queue_t *createQueue() {
  */
 void offer(queue_t *q, node_t *n) {
     if (q->nbNode <= 0) {
-        q->listNode = malloc(sizeof(node_t *) * (q->nbNode + 1));
+        q->listNode = malloc(sizeof(void *) * (q->nbNode + 1));
     } else {
-        q->listNode = realloc(q->listNode, sizeof(node_t *) * (q->nbNode + 1));
+        q->listNode = realloc(q->listNode, sizeof(void *) * (q->nbNode + 1));
     }
     if (q->listNode == NULL) {
         perror("realloc()");
@@ -37,12 +37,11 @@ void offer(queue_t *q, node_t *n) {
 /* poll()
  * returns the node at the beginning of the queue and removes it.
  */
-node_t *poll(queue_t *q) {
+void *poll(queue_t *q) {
     int size_memory = q->nbNode;
-    node_t **memory = NULL;
-    memory = q->listNode;
+    void **memory = q->listNode;
     q->nbNode--;
-    q->listNode = malloc(sizeof(node_t *) * q->nbNode);
+    q->listNode = malloc(sizeof(void *) * q->nbNode);
     if (q->listNode == NULL) {
         perror("malloc()");
         exit(EXIT_FAILURE);
@@ -50,7 +49,7 @@ node_t *poll(queue_t *q) {
     for (int i = 0; i < size_memory - 1; i++) {
         q->listNode[i] = memory[i + 1];
     }
-    node_t *value = *memory;
+    void *value = *memory;
 
     //free memory
     free(memory);
@@ -87,14 +86,4 @@ int isEmpty(queue_t *q) {
         return 0;
     }
     return 1;
-}
-
-/* printQueue()
- * displays all nodes in the queue.
- */
-void printQueue(queue_t *queue) {
-    printf("Nodes :\n");
-    for (int i = 0; i < queue->nbNode; i++) {
-        printNode(queue->listNode[i]);
-    }
 }
